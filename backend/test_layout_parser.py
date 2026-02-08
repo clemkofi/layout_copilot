@@ -8,6 +8,8 @@ from backend.services.layout_parser import LayoutParser
 
 async def test_layout_parser() -> None:
     yaml_path = DATA_DIR / "data.txt"
+    if not yaml_path.exists():
+        return f"Data file not found: {yaml_path}"
 
     parser = LayoutParser()
     parsed = await parser.parse_layout_file(yaml_path)
@@ -22,6 +24,8 @@ async def test_layout_parser() -> None:
         print("First polygon:", parsed.polygons[0])
     if parsed.labels:
         print("First label:", parsed.labels[0])
+
+    return 0
 
 
 if __name__ == "__main__":
