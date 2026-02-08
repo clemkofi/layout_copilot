@@ -37,7 +37,7 @@ def main() -> int:
     parser.add_argument("--output", required=True, help="Output YAML path.")
     parser.add_argument("--cell-name", default=None)
     parser.add_argument("--config", default=None, help="Optional config JSON path.")
-    parser.add_argument("--delay-ms", type=int, default=10)
+    parser.add_argument("--delay-ms", type=int, default=1000)
     args = parser.parse_args()
 
     data_path = DATA_DIR / "data.txt"
