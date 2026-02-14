@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MoreHorizontal, Play, Trash2, Edit } from "lucide-react";
+import { Edit, Loader2, MoreHorizontal, Play, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ interface LayoutViewProps {
   selectedLayout: string | null;
   onSelectLayout: (name: string) => void;
   onGenerateLayout: (name: string) => void;
+  isGenerating?: boolean;
 }
 
 export function LayoutView({
@@ -21,6 +22,7 @@ export function LayoutView({
   selectedLayout,
   onSelectLayout,
   onGenerateLayout,
+  isGenerating = false,
 }: LayoutViewProps) {
   return (
     <div className="flex flex-col h-1/3 min-h-0">
@@ -45,18 +47,23 @@ export function LayoutView({
                   variant="ghost"
                   size="icon"
                   className="h-6 w-6"
+                  disabled={isGenerating}
                   onClick={(e) => {
                     e.stopPropagation();
                     onGenerateLayout(layout);
                   }}
                   title="Generate"
                 >
-                  <Play className="h-3 w-3" />
+                  {isGenerating ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Play className="h-3 w-3" />
+                  )}
                 </Button>
 
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Button variant="ghost" size="icon" className="h-6 w-6">
+                    <Button variant="ghost" size="icon" className="h-6 w-6" disabled={isGenerating}>
                       <MoreHorizontal className="h-3 w-3" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -65,12 +72,18 @@ export function LayoutView({
                       <Edit className="mr-2 h-4 w-4" /> Modify
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      disabled={isGenerating}
                       onClick={(e) => {
                         e.stopPropagation();
                         onGenerateLayout(layout);
                       }}
                     >
-                      <Play className="mr-2 h-4 w-4" /> Generate Layout
+                      {isGenerating ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Play className="mr-2 h-4 w-4" />
+                      )}
+                      Generate Layout
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-destructive">
                       <Trash2 className="mr-2 h-4 w-4" /> Delete

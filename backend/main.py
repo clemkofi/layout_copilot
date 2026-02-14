@@ -84,7 +84,7 @@ async def stream_job_logs(job_id: str):
                 # trigger when the job is complete or failed
                 if log_line is None:
                     current = job_manager.get_job(job_id)
-                    status = current.status if current else "unknown"
+                    status = current.status.value if current else "unknown"
                     yield {"event": "complete", "data": status}
                     break
                 yield {"event": "log", "data": log_line}

@@ -1,24 +1,16 @@
+import { useEffect, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 
-interface ConsoleProps {
-  logs?: string[];
-}
+export function Console() {
+  const { logs, isGenerating } = useWorkspace();
+  const endRef = useRef<HTMLDivElement | null>(null);
 
-const MOCK_LOGS = [
-  "Console Output",
-  "System Log install message...",
-  "System Log invoke maint wx about the scoriflas (8:22:8039M)",
-  "System Log dptimput message...",
-  "Console Output Messaged",
-  "Console Output Messaged",
-  "Console Output Output Messaged",
-  "Console Output Messaged",
-  "Console Output Messaged",
-  "Console Output Messaged",
-];
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ block: "end" });
+  }, [logs]);
 
-export function Console({ logs = MOCK_LOGS }: ConsoleProps) {
   return (
     <Card className="h-full border-0 shadow-none flex flex-col bg-transparent">
       <CardHeader className="px-3">
@@ -28,9 +20,16 @@ export function Console({ logs = MOCK_LOGS }: ConsoleProps) {
         <div className="h-full overflow-hidden rounded-md border bg-muted/30">
           <ScrollArea className="h-full w-full">
             <div className="p-2.5 font-mono text-xs leading-relaxed space-y-1">
-              {logs.map((log, i) => (
-                <div key={i}>{log}</div>
-              ))}
+              {logs.length === 0 ? (
+                <div className="text-muted-foreground">
+                  {isGenerating
+                    ? "Generating layout..."
+                    : "No output yet. Generate a layout to see logs here."}
+                </div>
+              ) : (
+                logs.map((log, i) => <div key={`${log}-${i}`}>{log}</div>)
+              )}
+              <div ref={endRef} />
             </div>
           </ScrollArea>
         </div>
